@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const jogarButton = document.getElementById('jogar');
     const mensagemElement = document.getElementById('mensagem');
 
-    const imagens = ["img/001_.jpg", "img/002_.jpg", "img/003_.jpg", "img/004_.jpg", "img/005_.jpg"];
+    const imagens = ["img/anime.jpg", "img/002_.jpg", "img/003_.jpg", "img/004_.jpg", "img/005_.jpg"];
 
     function atualizarSaldo() {
         saldoElement.textContent = `Saldo atual: R$${saldo}`;
@@ -18,15 +18,15 @@ document.addEventListener('DOMContentLoaded', () => {
         mensagemElement.textContent = mensagem;
     }
 
-    function girarSlot(slot, rolos, callback) {
+    function girarSlot(slot, callback) {
         let contador = 0;
         const intervalo = setInterval(() => {
             const indice = Math.floor(Math.random() * imagens.length);
             slot.src = imagens[indice];
             contador++;
-            if (contador >= rolos.length) {
+            if (contador >= 20) { // Número de giros antes de parar
                 clearInterval(intervalo);
-                callback(rolos[contador - 1]);
+                callback(imagens[indice]);
             }
         }, 100);
     }
@@ -45,21 +45,15 @@ document.addEventListener('DOMContentLoaded', () => {
         saldo -= aposta;
         atualizarSaldo();
 
-        const rolos = [];
-        for (let i = 0; i < 3; i++) {
-            const indice = Math.floor(Math.random() * imagens.length);
-            rolos.push(imagens[indice]);
-        }
-
-        girarSlot(slot1, rolos, (resultado1) => {
-            girarSlot(slot2, rolos, (resultado2) => {
-                girarSlot(slot3, rolos, (resultado3) => {
+        girarSlot(slot1, (resultado1) => {
+            girarSlot(slot2, (resultado2) => {
+                girarSlot(slot3, (resultado3) => {
                     const resultados = [resultado1, resultado2, resultado3];
                     let mensagem = "";
 
                     if (resultados[0] === resultados[1] && resultados[1] === resultados[2]) {
                         let ganho;
-                        if (resultados[0] === "img/001_.jpg") {
+                        if (resultados[0] === "img/anime.jpg") {
                             ganho = aposta * 3;
                             mensagem = `Parabéns! Você ganhou R$${ganho} com três imagens iguais de 001_.jpg!`;
                         } else if (resultados[0] === "img/002_.jpg") {
