@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    let saldo = 1000;
+    let saldo = 100;
     const saldoElement = document.getElementById('saldo');
     const slot1 = document.getElementById('slot1');
     const slot2 = document.getElementById('slot2');
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Lista de imagens com pesos
     const imagens = [
-        { src: "img/anime.jpg", peso: 1 },
+        { src: "img/anime.jpg", peso: 2 },
         { src: "img/madmax.jpg", peso: 1 },
         { src: "img/tetas.jpg", peso: 1 },
         { src: "img/Julieta.jpg", peso: 1 },
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const indice = Math.floor(Math.random() * listaPonderada.length);
             slot.src = listaPonderada[indice];
             contador++;
-            if (contador >= 10) { // Número de giros antes de parar
+            if (contador >= 20) { // Número de giros antes de parar
                 clearInterval(intervalo);
                 callback(listaPonderada[indice]);
             }

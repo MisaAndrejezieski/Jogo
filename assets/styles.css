@@ -8,10 +8,11 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
+    color: #e0e414;
 }
 
 .container {
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(10, 10, 10, 0);
     padding: 20px;
     border-radius: 10px;
     text-align: center;
@@ -31,6 +32,7 @@ body {
 
 .aposta, .compra-creditos {
     margin: 20px 0;
+    color: #fcf9f9;
 }
 
 button {
@@ -42,5 +44,5 @@ button {
 #mensagem {
     margin-top: 20px;
     font-size: 16px;
-    color: #333;
+    color: #e0e414;
 }
