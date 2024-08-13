@@ -7,8 +7,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const apostaInput = document.getElementById('aposta');
     const jogarButton = document.getElementById('jogar');
     const mensagemElement = document.getElementById('mensagem');
+    const compraInput = document.getElementById('compra');
+    const comprarButton = document.getElementById('comprar');
 
-    const imagens = ["img/anime.jpg", "img/002_.jpg", "img/003_.jpg", "img/004_.jpg", "img/005_.jpg"];
+    // Lista de imagens com pesos
+    const imagens = [
+        { src: "img/anime.jpg", peso: 1 },
+        { src: "img/madmax.jpg", peso: 1 },
+        { src: "img/tetas.jpg", peso: 1 },
+        { src: "img/Julieta.jpg", peso: 1 },
+        { src: "img/Ravena.jpg", peso: 1 }
+    ];
+
+    // Função para criar uma lista ponderada
+    function criarListaPonderada(imagens) {
+        const listaPonderada = [];
+        imagens.forEach(imagem => {
+            for (let i = 0; i < imagem.peso; i++) {
+                listaPonderada.push(imagem.src);
+            }
+        });
+        return listaPonderada;
+    }
+
+    const listaPonderada = criarListaPonderada(imagens);
 
     function atualizarSaldo() {
         saldoElement.textContent = `Saldo atual: R$${saldo}`;
@@ -21,14 +43,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function girarSlot(slot, callback) {
         let contador = 0;
         const intervalo = setInterval(() => {
-            const indice = Math.floor(Math.random() * imagens.length);
-            slot.src = imagens[indice];
+            const indice = Math.floor(Math.random() * listaPonderada.length);
+            slot.src = listaPonderada[indice];
             contador++;
-            if (contador >= 20) { // Número de giros antes de parar
+            if (contador >= 10) { // Número de giros antes de parar
                 clearInterval(intervalo);
-                callback(imagens[indice]);
+                callback(listaPonderada[indice]);
             }
-        }, 100);
+        }, 50); // Velocidade dos giros
     }
 
     function jogar() {
@@ -54,15 +76,25 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (resultados[0] === resultados[1] && resultados[1] === resultados[2]) {
                         let ganho;
                         if (resultados[0] === "img/anime.jpg") {
-                            ganho = aposta * 3;
-                            mensagem = `Parabéns! Você ganhou R$${ganho} com três imagens iguais de 001_.jpg!`;
-                        } else if (resultados[0] === "img/002_.jpg") {
+                            ganho = aposta * 10;
+                            mensagem = `Parabéns! Você ganhou R$${ganho} com três imagens iguais de anime!`;
+                        } else if (resultados[0] === "img/madmax.jpg") {
+                            ganho = aposta * 8;
+                            mensagem = `Parabéns! Você ganhou R$${ganho} com três imagens iguais de Mad Max!`;
+                        } else if (resultados[0] === "img/Julieta.jpg") {
+                            ganho = aposta * 6;
+                            mensagem = `Parabéns! Você ganhou R$${ganho} com três imagens iguais de Julieta!`;
+                        } else if (resultados[0] === "img/tetas.jpg") {
                             ganho = aposta * 4;
-                            mensagem = `Parabéns! Você ganhou R$${ganho} com três imagens iguais de 002_.jpg!`;
+                            mensagem = `Parabéns! Você ganhou R$${ganho} com três imagens iguais de Tetas!`;
+                        } else if (resultados[0] === "img/Ravena.jpg") {
+                            ganho = aposta * 2;
+                            mensagem = `Parabéns! Você ganhou R$${ganho} com três imagens iguais de Ravena!`;
                         } else {
                             ganho = aposta * 2;
                             mensagem = `Parabéns! Você ganhou R$${ganho} com três imagens iguais!`;
                         }
+
                         saldo += ganho;
                     } else if (new Set(resultados).size === 3) {
                         saldo += aposta;
@@ -76,8 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     if (saldo <= 0) {
                         if (confirm("Saldo insuficiente para continuar jogando. Deseja comprar mais créditos?")) {
-                            saldo = 1000; // Aqui você pode adicionar lógica para comprar créditos
-                            atualizarSaldo();
+                            exibirMensagem("Por favor, compre mais créditos para continuar jogando.");
                         } else {
                             exibirMensagem("Fim de Jogo");
                         }
@@ -87,6 +118,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function comprarCreditos() {
+        const compra = parseInt(compraInput.value);
+        if (isNaN(compra) || compra <= 0) {
+            exibirMensagem("Por favor, insira um valor de compra válido.");
+            return;
+        }
+
+        saldo += compra;
+        atualizarSaldo();
+        exibirMensagem(`Você comprou R$${compra} em créditos!`);
+    }
+
     jogarButton.addEventListener('click', jogar);
+    comprarButton.addEventListener('click', comprarCreditos);
     atualizarSaldo();
 });
