@@ -1,2 +1,2 @@
 # Jogo
- Jogo de aaposta 
+ Jogo de aposta 
