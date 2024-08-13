@@ -10,6 +10,9 @@ body {
     margin: 0;
     color: #e0e414;
 }
+.saldo {
+    color: rgb(7, 253, 253);
+}
 
 .container {
     background-color: rgba(10, 10, 10, 0);
@@ -32,7 +35,7 @@ body {
 
 .aposta, .compra-creditos {
     margin: 20px 0;
-    color: #fcf9f9;
+    color: #e0e414;
 }
 
 button {
