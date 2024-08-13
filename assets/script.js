@@ -6,11 +6,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const slot3 = document.getElementById('slot3');
     const apostaInput = document.getElementById('aposta');
     const jogarButton = document.getElementById('jogar');
+    const mensagemElement = document.getElementById('mensagem');
 
     const imagens = ["img/001_.jpg", "img/002_.jpg", "img/003_.jpg", "img/004_.jpg", "img/005_.jpg"];
 
     function atualizarSaldo() {
         saldoElement.textContent = `Saldo atual: R$${saldo}`;
+    }
+
+    function exibirMensagem(mensagem) {
+        mensagemElement.textContent = mensagem;
     }
 
     function girarSlot(slot, rolos, callback) {
@@ -28,12 +33,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function jogar() {
         const aposta = parseInt(apostaInput.value);
+        if (isNaN(aposta) || aposta <= 0) {
+            exibirMensagem("Por favor, insira um valor de aposta válido.");
+            return;
+        }
         if (aposta > saldo) {
-            alert("Aposta maior que o saldo disponível. Tente novamente.");
+            exibirMensagem("Aposta maior que o saldo disponível. Tente novamente.");
             return;
         }
 
         saldo -= aposta;
+        atualizarSaldo();
 
         const rolos = [];
         for (let i = 0; i < 3; i++) {
@@ -45,35 +55,37 @@ document.addEventListener('DOMContentLoaded', () => {
             girarSlot(slot2, rolos, (resultado2) => {
                 girarSlot(slot3, rolos, (resultado3) => {
                     const resultados = [resultado1, resultado2, resultado3];
+                    let mensagem = "";
 
                     if (resultados[0] === resultados[1] && resultados[1] === resultados[2]) {
                         let ganho;
                         if (resultados[0] === "img/001_.jpg") {
                             ganho = aposta * 3;
-                            alert(`Parabéns! Você ganhou R$${ganho} com três imagens iguais de 001_.jpg!`);
+                            mensagem = `Parabéns! Você ganhou R$${ganho} com três imagens iguais de 001_.jpg!`;
                         } else if (resultados[0] === "img/002_.jpg") {
                             ganho = aposta * 4;
-                            alert(`Parabéns! Você ganhou R$${ganho} com três imagens iguais de 002_.jpg!`);
+                            mensagem = `Parabéns! Você ganhou R$${ganho} com três imagens iguais de 002_.jpg!`;
                         } else {
                             ganho = aposta * 2;
-                            alert(`Parabéns! Você ganhou R$${ganho} com três imagens iguais!`);
+                            mensagem = `Parabéns! Você ganhou R$${ganho} com três imagens iguais!`;
                         }
                         saldo += ganho;
                     } else if (new Set(resultados).size === 3) {
                         saldo += aposta;
-                        alert(`Você recuperou sua aposta de R$${aposta} com três imagens diferentes!`);
+                        mensagem = `Você recuperou sua aposta de R$${aposta} com três imagens diferentes!`;
                     } else {
-                        alert("Tente novamente!");
+                        mensagem = "Tente novamente!";
                     }
 
                     atualizarSaldo();
+                    exibirMensagem(mensagem);
 
                     if (saldo <= 0) {
                         if (confirm("Saldo insuficiente para continuar jogando. Deseja comprar mais créditos?")) {
                             saldo = 1000; // Aqui você pode adicionar lógica para comprar créditos
                             atualizarSaldo();
                         } else {
-                            alert("Fim de Jogo");
+                            exibirMensagem("Fim de Jogo");
                         }
                     }
                 });
